@@ -35,11 +35,11 @@ This application demonstrates a modern security architecture using:
 ### 1. Start Keycloak
 
 ```bash
-# Start Keycloak with automatic realm import
-docker-compose up -d
+  # Start Keycloak with automatic realm import
+  docker compose up -d
 
-# Wait for Keycloak to start (check with)
-docker-compose logs -f
+  # Wait for Keycloak to start (check with)
+  docker compose logs -f
 ```
 
 This will:
@@ -50,7 +50,7 @@ This will:
 ### 2. Start the Quarkus Application
 
 ```bash
-mvn quarkus:dev
+  mvn quarkus:dev
 ```
 
 ### 3. Test the API
@@ -58,31 +58,41 @@ mvn quarkus:dev
 #### Get an Access Token
 
 ```bash
-export access_token=$(curl --silent --location 'http://localhost:8180/realms/devgurupk/protocol/openid-connect/token' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'client_id=secured-api' \
---data-urlencode 'client_secret=TvzMGHjySFk4Nd1jZV0uh1Z8NP8DPiIq' \
---data-urlencode 'grant_type=client_credentials' | jq --raw-output '.access_token')
+  export access_token=$(curl --silent --location 'http://localhost:8180/realms/devgurupk/protocol/openid-connect/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data-urlencode 'client_id=secured-api' \
+  --data-urlencode 'client_secret=TvzMGHjySFk4Nd1jZV0uh1Z8NP8DPiIq' \
+  --data-urlencode 'grant_type=client_credentials' | jq --raw-output '.access_token')
 
-echo "Access Token: $access_token"
+  echo "Access Token: $access_token"
 ```
 
 #### Get a Requesting Party Token (RPT)
 
 ```bash
-export rpt_token=$(curl --silent --location 'http://localhost:8180/realms/devgurupk/protocol/openid-connect/token' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---header "Authorization: Bearer $access_token" \
---data-urlencode 'grant_type=urn:ietf:params:oauth:grant-type:uma-ticket' \
---data-urlencode 'audience=secured-api' | jq --raw-output '.access_token')
-
-echo "RPT Token: $rpt_token"
+  export rpt_token=$(curl --silent --location 'http://localhost:8180/realms/devgurupk/protocol/openid-connect/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --header "Authorization: Bearer $access_token" \
+  --data-urlencode 'grant_type=urn:ietf:params:oauth:grant-type:uma-ticket' \
+  --data-urlencode 'audience=secured-api' | jq --raw-output '.access_token')
+  
+  echo "RPT Token: $rpt_token"
 ```
 
 #### Call the Protected API
 
 ```bash
-curl --location 'http://localhost:8080/hello' --header "Authorization: Bearer $rpt_token"
+  curl --location 'http://localhost:8080/hello' --header "Authorization: Bearer $rpt_token"
+```
+
+## Calling this API should return `403`
+```bash
+  curl --location 'http://localhost:8080/admin' --header "Authorization: Bearer $rpt_token"
+```
+
+## Calling this API should return token info
+```bash
+  curl --location 'http://localhost:8080/token-info' --header "Authorization: Bearer $rpt_token"
 ```
 
 ## Understanding UMA Authorization
