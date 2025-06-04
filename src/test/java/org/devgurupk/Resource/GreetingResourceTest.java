@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.anyOf;
 
 @QuarkusTest
 public class GreetingResourceTest {
@@ -98,7 +97,7 @@ public class GreetingResourceTest {
     RestAssured.given()
       .when().get("/token-info")
       .then()
-      .statusCode(anyOf(is(200), is(401)));
+      .statusCode(200);
   }
 
   @Test
