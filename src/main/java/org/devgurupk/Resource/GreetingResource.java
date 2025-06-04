@@ -52,7 +52,12 @@ public class GreetingResource {
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   public Response publicEndpoint() {
-    return Response.ok(Map.of("message", "This is a public endpoint")).build();
+    Log.info("Public endpoint accessed");
+    return Response.ok(Map.of(
+      "message", "This is a public endpoint",
+      "authenticated", securityIdentity != null && securityIdentity.isAnonymous() == false,
+      "timestamp", System.currentTimeMillis()
+    )).build();
   }
 
   @GET

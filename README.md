@@ -85,9 +85,19 @@ This will:
   curl --location 'http://localhost:8080/hello' --header "Authorization: Bearer $rpt_token"
 ```
 
-## Calling this API should return `403`
+#### Call the Admin API (should return 403)
 ```bash
   curl --location 'http://localhost:8080/admin' --header "Authorization: Bearer $rpt_token"
+```
+
+#### Call the Public API (no authentication required)
+```bash
+  curl --location 'http://localhost:8080/public'
+```
+
+#### Get Token Information
+```bash
+  curl --location 'http://localhost:8080/token-info' --header "Authorization: Bearer $rpt_token"
 ```
 
 ## Calling this API should return token info
@@ -159,6 +169,16 @@ The Keycloak realm is configured with:
 
 - **Authentication Failed**: Check OIDC configuration in application.properties
 - **Authorization Failed**: Verify the permission mapping in CustomSecurityIdentityAugmentor
+- **Public Endpoints Require Authentication**: Ensure you've properly configured path-specific permissions in application.properties:
+  ```properties
+  # Secure specific paths
+  quarkus.http.auth.permission.authenticated.paths=/hello,/admin,/token-info
+  quarkus.http.auth.permission.authenticated.policy=authenticated
+
+  # Public paths
+  quarkus.http.auth.permission.public.paths=/public
+  quarkus.http.auth.permission.public.policy=permit
+  ```
 
 ---
 
