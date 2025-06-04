@@ -42,8 +42,8 @@ public class GreetingResource {
   @PermissionsAllowed("admin:ACCESS")
   public Response admin() {
     return Response.ok(Map.of(
-        "message", "Admin area - restricted access",
-        "user", securityIdentity.getPrincipal().getName()
+      "message", "Admin area - restricted access",
+      "user", securityIdentity.getPrincipal().getName()
     )).build();
   }
 
@@ -55,7 +55,7 @@ public class GreetingResource {
     Log.info("Public endpoint accessed");
     return Response.ok(Map.of(
       "message", "This is a public endpoint",
-      "authenticated", securityIdentity != null && securityIdentity.isAnonymous() == false,
+      "authenticated", securityIdentity != null && !securityIdentity.isAnonymous(),
       "timestamp", System.currentTimeMillis()
     )).build();
   }
@@ -77,7 +77,7 @@ public class GreetingResource {
     }
 
     return Response.status(Response.Status.UNAUTHORIZED)
-        .entity(Map.of("error", "Not authenticated with a valid token"))
-        .build();
+      .entity(Map.of("error", "Not authenticated with a valid token"))
+      .build();
   }
 }
