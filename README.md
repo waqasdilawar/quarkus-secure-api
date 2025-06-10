@@ -182,6 +182,26 @@ The Keycloak realm is configured with:
 
 ---
 
+## Code Coverage
+
+This project uses JaCoCo for code coverage analysis:
+
+- **Configuration**: Coverage thresholds are set to 85% for line coverage
+- **Exclusions**: Security-related classes are excluded from coverage requirements
+- **Reports**: Generated in `target/site/jacoco/` after running tests
+
+### Running Coverage Analysis
+
+```bash
+# Run tests with coverage analysis
+mvn clean verify
+
+# View the coverage report
+open target/site/jacoco/index.html
+```
+
+---
+
 ## Keycloak Admin Access
 
 - **URL**: http://localhost:8180/admin
